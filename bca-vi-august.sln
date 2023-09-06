@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bca-vi-august", "bca-vi-august.csproj", "{F3BDF91B-72BA-4C9B-A9DF-B6709866DC1B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F3BDF91B-72BA-4C9B-A9DF-B6709866DC1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3BDF91B-72BA-4C9B-A9DF-B6709866DC1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3BDF91B-72BA-4C9B-A9DF-B6709866DC1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3BDF91B-72BA-4C9B-A9DF-B6709866DC1B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

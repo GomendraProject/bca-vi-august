@@ -1,0 +1,18 @@
+﻿@model bca_vi_august.ViewModels.ProductAddVm
+
+Name: @Model.Name
+<br/>
+
+<h3>
+    Hello Product!
+</h3>
+
+<form action="" method="get">
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" type="text" class="form-control">
+    </div>
+    <button class="btn btn-success">
+        <span class="fa fa-check-circle"></span> Save
+    </button>
+</form>
