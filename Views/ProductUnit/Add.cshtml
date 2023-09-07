@@ -1,0 +1,24 @@
+﻿@model bca_vi_august.ViewModels.UnitAddVm
+
+<div class="row">
+    <div class="col-4">
+        <form method="post">
+            <div class="form-group">
+                <label asp-for="Name"></label>
+                <input asp-for="Name" type="text" class="form-control">
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description"></label>
+                <input asp-for="Description" type="text" class="form-control">
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <button class="btn btn-success">
+                    Save
+                </button>
+            </div>
+        </form>
+    </div>-
+</div>
