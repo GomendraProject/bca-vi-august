@@ -113,3 +113,108 @@ public IActionResult Search()
     }
   </tbody>
 </table>
+
+
+```
+
+
+
+## Code and patterns for Search Page
+
+1. Accept a view model in action. The View model must contain properties that the user will provide
+2. Perform filtering and get data from database
+3. Set the data in the same view model
+4. Return the view model to view
+
+Same view model will be used to capture user input as well as display data to user.
+
+```
+public IActionResult Index(UnitIndexVm vm)
+    {
+        // Use dummy data for now
+        // Get data from database later
+        vm.Data = productUnits
+            .Where(x =>
+                string.IsNullOrEmpty(vm.Name) || x.Name.Contains(vm.Name)
+            ).ToList();
+        return View(vm);
+    }
+
+// UnitIndexVm.cs
+public class UnitIndexVm
+{
+    // For Retrieving user input
+    public string Name { get; set; }
+
+    // Sending data to view
+    public List<ProductUnit> Data;
+}
+
+// Views/ProductUnit/Index.cshtml
+
+@model bca_vi_august.ViewModels.UnitIndexVm //Using the view model sent from controller action
+
+<!-- Rendering the filter form -->
+<form class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-3">
+                <label asp-for="Name"></label>
+                <input asp-for="Name" type="text" class="form-control">
+            </div>
+            <div class="col-3">
+                <br>
+                <button class="btn btn-primary">
+                    Search
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- Showing data -->
+<div class="card mt-2">
+    <div class="card-body">
+        <table class="table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th>
+                    SN
+                </th>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            @{
+                var sn = 1;
+                foreach (var unit in Model.Data)
+                {
+                    <tr>
+                        <td>
+                            @(sn++)
+                        </td>
+                        <td>
+                            @unit.Name
+                        </td>
+                        <td>
+                            <a href="/productunit/edit/@unit.Id" class="btn btn-primary">
+                                Edit
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+```
+
+
