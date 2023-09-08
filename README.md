@@ -128,7 +128,7 @@ public IActionResult Search()
 
 Same view model will be used to capture user input as well as display data to user.
 
-```
+```csharp
 public IActionResult Index(UnitIndexVm vm)
     {
         // Use dummy data for now
@@ -218,3 +218,85 @@ public class UnitIndexVm
 ```
 
 
+## Edit Pattern
+
+1. A controller action for displaying the edit form
+2. Validate that the data exists
+3. Show data in the form
+
+   1.1. Another action for actually updating user data
+   1.2  Validate user input data [Model state validation
+   1.3  Update data in databse
+   1.4 Redirect user to another page
+
+ ```csharp
+
+// Form Action
+
+// Accepting the id of the item to edit. User will access this action through a link
+// Potential link : <a asp-action="Edit" asp-route-id="@unit.Id"> Edit </a> or <a href="/productunit/edit/@unit.id"> Edit </a>
+public IActionResult Edit(int id)
+{
+    // To edit
+    // 1. Identifier to identify data : ID
+    // 2. Validate that the item exists
+    // 3. Get the data and display the data in the form
+    try
+    {
+        // Getting data from database. Currently using local data
+        var item = productUnits.Where(x => x.Id == id)
+            .FirstOrDefault();
+        if (item == null)
+        {
+            throw new Exception("Item not found");
+        }
+        // ViewModel
+       //  Setting data from database (model) into view model. To show the data in the edit form  
+        var vm = new UnitEditVm();
+        vm.Name = item.Name;
+        vm.Description = item.Name;
+        // Send the view model to view. This data will be used to show edit form
+        return View(vm);
+    }
+    catch (Exception e)
+    {
+        // Send error message
+        // If any error occurs, we redirect to the listing page with an error page
+        return RedirectToAction("Index");
+    }
+}
+
+// Action that will actuall update data
+// Using a Viewmodel in parameter to perform model binding.
+// The data user input will be filled by ASP.NET core in the view model
+[HttpPost]
+public IActionResult Edit(int id, UnitEditVm vm)
+{
+    try
+    {
+        var item = productUnits.Where(x => x.Id == id)
+            .FirstOrDefault();
+        if (item == null)
+        {
+            throw new Exception("Item not found");
+        }
+
+        if (!ModelState.IsValid)
+        {
+            // If user did not enter valid data, show the form again so that user can fix their mistake
+            return View(vm);
+        }
+        // Update data in database. Updating data locally for now
+        // The changes wont show up in view
+        item.Name = vm.Name;
+        // Save Changes
+        // Send Success Message
+        return RedirectToAction("Index");
+    }
+    catch (Exception e)
+    {
+        // Send error message
+        return RedirectToAction("Index");
+    }
+}
+```
