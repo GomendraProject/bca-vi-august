@@ -300,3 +300,106 @@ public IActionResult Edit(int id, UnitEditVm vm)
     }
 }
 ```
+
+
+### Database
+Database
+	-> Access -> Data Access Object
+		-> Ef Core -- Standard data access library
+			-> Entity Framework Core
+			-> ORM - Object Relational Mapper
+				-> Laravel - Eloquent
+				-> Node -> TypeORM
+				-> PHP -> Doctrine
+			-> Access to database without SQL query
+				-> Via Linq operators
+					-> Pros
+						-> No sql query
+						-> No Database lockin
+							-> Driver Libraries / Helper libraries
+								-> psql -> npgsql
+								-> sql server -> sqlserver
+								-> Connection String
+			-> Modify database without SQL query
+				-> DML - Via object manipulation
+				-> DDL - Via migration
+					-> Create new migration
+					-> Apply
+--
+
+Database Context
+	-- Application Db Context
+		-> Define Models - Define Tables
+	-- Migration
+		-> Run a command to create migration
+		-> 1. Manually run migration via command
+		-> 2. Automatically run migration when program runs
+	
+	-- Saving data and retrieving data
+	-- Generic Repository
+	-- UOW -- Depends
+
+-- Process
+1. How to create a table?
+	- Create a model.
+		[Table("inv_product")]
+		public class Product
+		{
+			// Define properties/Columns
+			public int Id { get;set; }
+			public int CategoryId { get;set; }
+			public string Name { get;set; }
+			public bool IsVatEnabled { get;set; }
+			public DateTime CreatedDate { get;set; }
+		}
+		
+		| Id int primary key auto increment not null
+		| CategoryId int
+		| Name varchar text
+		| IsVatEnabled bit -- sql server bool -- psql
+		| CreatedDate DATETIME -- SQL SERVER  timestampz --psql
+	- Register it in database context
+		In ApplicationDbContext, add a dbset property
+		
+		public DbSet<Product> Products { get;set; }
+	
+	- Add a migration
+		-> In project folder, open a terminal
+		-> If dotnet ef tools is not installed, install it
+			-- https://learn.microsoft.com/en-us/ef/core/cli/dotnet#installing-the-tools
+		-> dotnet ef migrations add "migration_name"
+			-- dotnet ef migrations add "add_product"
+			-- Creates a migration file
+	- Run migration
+
+2. Add / alter column
+	// Add a CreatedByUserId column to product table
+		[Table("inv_product")]
+		public class Product
+		{
+			// Define properties/Columns
+			public int Id { get;set; }
+			public int CategoryId { get;set; }
+			public string Name { get;set; }
+			public bool IsVatEnabled { get;set; }
+			
+			// public DateTime CreatedDate { get;set; }
+			
+			// Add this line
+			public int CreatedByUserId {get;set;}
+		}
+	-- Error: Column 'CreatedByUserId' not found
+	-- Add migration
+		- dotnet ef migrations add "remove_created_date_adD_created"
+	-- Run migration
+	
+
+-- Steps
+1. Use Database library. UseSqlServer
+2. Add connection string
+3. Add table and migration
+4. Run migration
+	- manually - dotnet ef database update
+	- Update
+		- Add this to program.cs after  var app = builder.Build();
+		app.Services.CreateScope().ServiceProvider.GetService<DbContext>().Database.Migrate();
