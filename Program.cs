@@ -7,8 +7,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
                        throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(connectionString));
+builder.Services.AddDbContext<ApplicationDbContext>(
+    options =>
+    {
+        // options.UseSqlite(connectionString);
+        // SQLITE: File database
+        // Use SQL SERVER for database connection
+        options.UseSqlServer(connectionString);
+    });
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -16,7 +22,12 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddControllersWithViews()
     .AddRazorRuntimeCompilation();
 
+// Di Registration
+builder.Services.AddScoped<DbContext, ApplicationDbContext>();
+
 var app = builder.Build();
+
+app.Services.CreateScope().ServiceProvider.GetService<DbContext>().Database.Migrate();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
