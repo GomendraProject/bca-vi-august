@@ -3,6 +3,7 @@ using bca_vi_august.Data;
 using bca_vi_august.Models;
 using bca_vi_august.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace bca_vi_august.Controllers;
 
@@ -15,14 +16,12 @@ public class ProductUnitController : Controller
         _context = context;
     }
     
-    public IActionResult Index(UnitIndexVm vm)
+    public async Task<IActionResult> Index(UnitIndexVm vm)
     {
-        // Use dummy data for now
-        // Get data from database later
-        vm.Data = _context.Units
+        vm.Data = await _context.Units
             .Where(x =>
                 string.IsNullOrEmpty(vm.Name) || x.Name.Contains(vm.Name)
-            ).ToList();
+            ).ToListAsync();
         return View(vm);
     }
 
@@ -52,7 +51,6 @@ public class ProductUnitController : Controller
                 
                 // Send changes to database
                 await _context.SaveChangesAsync();
-
                 // Complete the transaction
                 tx.Complete();
             }
@@ -67,7 +65,7 @@ public class ProductUnitController : Controller
         }
     }
 
-    public IActionResult Edit(int id)
+    public async Task<IActionResult> Edit(int id)
     {
         // To edit
         // 1. Identifier to identify data : ID
@@ -75,8 +73,8 @@ public class ProductUnitController : Controller
         // 3. Get the data and display the data in the form
         try
         {
-            var item = _context.Units.Where(x => x.Id == id)
-                .FirstOrDefault();
+            var item = await _context.Units.Where(x => x.Id == id)
+                .FirstOrDefaultAsync();
             if (item == null)
             {
                 throw new Exception("Item not found");
@@ -100,8 +98,8 @@ public class ProductUnitController : Controller
     {
         try
         {
-            var item = _context.Units.Where(x => x.Id == id)
-                .FirstOrDefault();
+            var item = await _context.Units.Where(x => x.Id == id)
+                .FirstOrDefaultAsync();
             if (item == null)
             {
                 throw new Exception("Item not found");
