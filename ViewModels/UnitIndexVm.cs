@@ -9,4 +9,7 @@ public class UnitIndexVm
 
     // Sending data to view
     public List<ProductUnit> Data;
+    
+    // Vm
+    public List<ProductUnitDisplayVm> DisplayData;
 }

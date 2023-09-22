@@ -27,7 +27,7 @@ builder.Services.AddScoped<DbContext, ApplicationDbContext>();
 
 var app = builder.Build();
 
-app.Services.CreateScope().ServiceProvider.GetService<DbContext>().Database.Migrate();
+app.Services.CreateScope().ServiceProvider.GetService<DbContext>()?.Database.Migrate();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
