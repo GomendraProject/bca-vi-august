@@ -404,3 +404,56 @@ Database Context
 	- Update
 		- Add this to program.cs after  var app = builder.Build();
 		app.Services.CreateScope().ServiceProvider.GetService<DbContext>().Database.Migrate();
+
+
+
+
+
+	-- Tomorrow
+		-> Linq operation
+			-> LINQ -> Data access 
+				-> Write C# code to filter data
+					-> EfCore converts it into SQL statements
+		-> Redirects
+		-> Relationships
+		-> Select options
+		
+	-- C# Best Feature
+		- Type Safety
+		
+		<?php echo $data["none"]; ?>
+		-- Error
+		
+		C#
+		@Model.Index	
+
+			// Always start with DbContext
+			// Get Variable of the data we want DbSet<Product> Products {get;set;}
+			
+			// SELECT * FROM product WHERE Id = 1
+
+			1. Where
+			2. Actual data retrieve
+			
+SELECT * FROM product WHERE Id = 9;
+
+_context.Products.Where(x => x.Id == 9)
+	.ToListAsync();
+
+SELECT * FROM product WHERE CategoryId = 9 AND Status = 'ACTIVE'
+	AND (isVat = false OR noVat = true);
+	
+var data = await _context.Products.Where(x => x.CategoryId == 9)
+	.Where(x => x.Status == 'ACTIVE')
+	.Where(x => x.isVat == false || x.noVat == true)
+	.ToListAsync();
+	
+
+Methods
+	- ToListAsync -> Executes query and get list of items
+	- FirstOrDefaultAsync() -> Execute the query and get the first data
+		-> To Get Single Data
+
+
+// Redirect
+header("Location: /product/index.php");
