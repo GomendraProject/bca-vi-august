@@ -22,6 +22,28 @@ public class ProductUnitController : Controller
             .Where(x =>
                 string.IsNullOrEmpty(vm.Name) || x.Name.Contains(vm.Name)
             ).ToListAsync();
+        vm.DisplayData = await _context.Units
+            .Where(x =>
+                string.IsNullOrEmpty(vm.Name) || x.Name.Contains(vm.Name)
+            )
+            .Select(x => new ProductUnitDisplayVm()
+            {
+                Id = x.Id,
+                Name = x.Name
+            })
+            .ToListAsync();
+
+
+        var items = await _context.Categories
+            .Where(category => category.Id == 45)
+            .Where(category => category.Name.StartsWith("X_") || category.Name.StartsWith("Y_"))
+            .OrderBy(x => x.Name)
+            .ToListAsync();
+        
+        // Usually
+        // 1. Find by id
+        // 2. Search
+        
         return View(vm);
     }
 
@@ -57,6 +79,10 @@ public class ProductUnitController : Controller
 
             // Send success message
             return RedirectToAction("Index");
+
+            return RedirectToAction("Index", "Home");
+
+            return Redirect("/product/index");
         }
         catch (Exception e)
         {
