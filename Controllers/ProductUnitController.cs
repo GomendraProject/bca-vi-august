@@ -21,7 +21,9 @@ public class ProductUnitController : Controller
         vm.Data = await _context.Units
             .Where(x =>
                 string.IsNullOrEmpty(vm.Name) || x.Name.Contains(vm.Name)
-            ).ToListAsync();
+            )
+            .Include(x => x.Category) // To Get Category data automatically
+            .ToListAsync();
         vm.DisplayData = await _context.Units
             .Where(x =>
                 string.IsNullOrEmpty(vm.Name) || x.Name.Contains(vm.Name)
@@ -47,9 +49,17 @@ public class ProductUnitController : Controller
         return View(vm);
     }
 
-    public IActionResult Add()
+    public async Task<IActionResult> Add()
     {
-        return View();
+        var vm = new UnitAddVm();
+        vm.Categories = await _context.Categories.ToListAsync();
+      //  await ConfigureAddViewVm(vm);
+        return View(vm);
+    }
+
+    public async Task ConfigureAddViewVm(UnitAddVm vm)
+    {
+        vm.Categories = await _context.Categories.ToListAsync();
     }
 
     [HttpPost]
@@ -59,6 +69,8 @@ public class ProductUnitController : Controller
         {
             if (!ModelState.IsValid)
             {
+                vm.Categories = await _context.Categories.ToListAsync();
+                // await ConfigureAddViewVm(vm);
                 return View(vm);
             }
 
@@ -67,6 +79,16 @@ public class ProductUnitController : Controller
                 var unit = new ProductUnit();
                 unit.Name = vm.Name;
                 unit.Description = vm.Description;
+                
+                // Option1: Use ID directly
+                unit.CategoryId = vm.CategoryId;
+                
+                // Option 2: Use object relations
+
+                // var category = await _context.Categories.Where(x => x.Id == vm.CategoryId)
+                //     .FirstOrDefaultAsync();
+                //
+                // unit.Category = category;
                 
                 // Mark this object to be inserted
                 _context.Units.Add(unit);
@@ -109,7 +131,11 @@ public class ProductUnitController : Controller
             // ViewModel
             var vm = new UnitEditVm();
             vm.Name = item.Name;
-            vm.Description = item.Name;
+            vm.Description = item.Description;
+            vm.CategoryId = item.CategoryId;
+            
+            vm.Categories = await _context.Categories.ToListAsync();
+            
             return View(vm);
         }
         catch (Exception e)
@@ -133,6 +159,7 @@ public class ProductUnitController : Controller
 
             if (!ModelState.IsValid)
             {
+                vm.Categories = await _context.Categories.ToListAsync();
                 return View(vm);
             }
 
@@ -142,6 +169,7 @@ public class ProductUnitController : Controller
                 // The changes wont show up in view
                 item.Name = vm.Name;
                 item.Description = vm.Description;
+                item.CategoryId = vm.CategoryId;
 
                 await _context.SaveChangesAsync();
                 

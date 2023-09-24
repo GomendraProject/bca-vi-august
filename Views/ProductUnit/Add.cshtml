@@ -4,6 +4,14 @@
     <div class="col-4">
         <form method="post">
             <div class="form-group">
+                <label asp-for="CategoryId"></label>
+                <select asp-for="CategoryId" class="form-control"
+                    asp-items="@Model.CategoryOptionSelectList()"
+                        >
+                    <option value="">-- SELECT A CATEGORY --</option>
+                </select>
+            </div>
+            <div class="form-group">
                 <label asp-for="Name"></label>
                 <input asp-for="Name" type="text" class="form-control">
                 <span asp-validation-for="Name" class="text-danger"></span>
@@ -13,7 +21,7 @@
                 <input asp-for="Description" type="text" class="form-control">
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            
+
             <div class="form-group">
                 <button class="btn btn-success">
                     Save
