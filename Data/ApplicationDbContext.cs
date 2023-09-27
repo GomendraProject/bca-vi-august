@@ -14,4 +14,7 @@ public class ApplicationDbContext : IdentityDbContext
     public DbSet<ProductUnit> Units { get; set; }
     
     public DbSet<Category> Categories { get; set; }
+    
+    public DbSet<Sales> Sales { get; set; }
+    public DbSet<SalesDetail> SalesDetails { get; set; }
 }
