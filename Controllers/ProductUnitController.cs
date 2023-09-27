@@ -24,17 +24,19 @@ public class ProductUnitController : Controller
             )
             .Include(x => x.Category) // To Get Category data automatically
             .ToListAsync();
+        
         vm.DisplayData = await _context.Units
             .Where(x =>
                 string.IsNullOrEmpty(vm.Name) || x.Name.Contains(vm.Name)
             )
-            .Select(x => new ProductUnitDisplayVm()
+            .Select(product => new ProductUnitDisplayVm()
             {
-                Id = x.Id,
-                Name = x.Name
+                Id = product.Id,
+                Name = product.Name,
+                CategoryName = product.Category.Name,
+                CategoryId = product.Category.Id
             })
             .ToListAsync();
-
 
         var items = await _context.Categories
             .Where(category => category.Id == 45)

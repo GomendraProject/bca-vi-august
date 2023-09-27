@@ -15,7 +15,7 @@ public class ProductUnit
     public long CategoryId { get; set; }
     
     public virtual Category Category { get; set; }
-   
+    
     // public long OldCategoryInfo { get; set; }
     //
     // [ForeignKey("OldCategoryInfo")]
